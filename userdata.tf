@@ -10,7 +10,7 @@ data "template_cloudinit_config" "userdata" {
     content_type = "text/x-shellscript"
     filename     = "userdata.sh"
     content = templatefile(var.user_data_path, {
-      CONFIG_BUCKET = local.use_bucket ? data.oci_objectstorage_bucket.this[0].name : ""
+      CONFIG_BUCKET = local.os_bucket
     })
   }
   # additional parts can be added here if needed

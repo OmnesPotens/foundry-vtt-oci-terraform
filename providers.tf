@@ -24,14 +24,15 @@ provider "oci" {
 }
 
 locals {
-  have_foundry_creds = try(length(var.foundry_credentials_path) > 0 ? true : false, false)
-  foundry_creds      = try(length(var.foundry_credentials_path) > 0 ? sensitive(file(var.foundry_credentials_path)) : "", "")
-  foundry_username   = local.have_foundry_creds ? sensitive(split(" ", "${local.foundry_creds}")[0]) : ""
-  foundry_password   = local.have_foundry_creds ? sensitive(split(" ", "${local.foundry_creds}")[1]) : ""
-  volume_id          = try(length(var.block_volume_name) > 0 ? data.oci_core_volumes.foundry_persistent[0].volumes[0].id : oci_core_instance.foundry_instance.boot_volume_id, oci_core_instance.foundry_instance.boot_volume_id)
-  use_bucket         = try(length(var.bucket_name) > 0 || var.create_bucket ? true : false, false)
-  public_domain      = try(length(var.domain) > 0 ? var.domain : oci_core_instance.foundry_instance.public_ip, oci_core_instance.foundry_instance.public_ip)
-  have_file_filesets = try(length(var.file_uploads[0]) > 0 ? true : false, false)
+  have_foundry_creds   = try(length(var.foundry_credentials_path) > 0 ? true : false, false)
+  foundry_creds        = try(length(var.foundry_credentials_path) > 0 ? sensitive(file(var.foundry_credentials_path)) : "", "")
+  foundry_username     = local.have_foundry_creds ? sensitive(split(" ", "${local.foundry_creds}")[0]) : ""
+  foundry_password     = local.have_foundry_creds ? sensitive(split(" ", "${local.foundry_creds}")[1]) : ""
+  volume_id            = try(length(var.block_volume_name) > 0 ? data.oci_core_volumes.foundry_persistent[0].volumes[0].id : oci_core_instance.foundry_instance.boot_volume_id, oci_core_instance.foundry_instance.boot_volume_id)
+  use_bucket           = try(length(var.bucket_name) > 0 || var.create_bucket ? true : false, false)
+  os_bucket            = local.use_bucket ? data.oci_objectstorage_bucket.this[0].name : ""
+  public_domain        = try(length(var.domain) > 0 ? var.domain : oci_core_instance.foundry_instance.public_ip, oci_core_instance.foundry_instance.public_ip)
+  have_file_filesets   = try(length(var.file_uploads[0]) > 0 ? true : false, false)
   have_folder_filesets = try(length(var.folder_uploads[0]) > 0 ? true : false, false)
 
   file_filesets = local.have_file_filesets ? distinct(flatten([for file in var.file_uploads : {

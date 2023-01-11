@@ -32,7 +32,7 @@ resource "oci_identity_policy" "this" {
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to use volume-family in tenancy",
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to use instance-family in tenancy",
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to read buckets in tenancy",
-    "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to read objects in tenancy",
+    "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to manage objects in tenancy where all {target.bucket.name='${local.os_bucket}'}",
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to read repos in tenancy"
   ]
 }

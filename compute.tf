@@ -26,11 +26,11 @@ resource "oci_core_instance" "foundry_instance" {
     oci_core_security_list.foundry_security_list
   ]
 
-  availability_domain  = local.selected_AD
-  compartment_id       = var.tenancy_ocid
-  display_name         = "foundry_instance"
-  shape                = var.compute_shape
-  state                = "RUNNING"
+  availability_domain = local.selected_AD
+  compartment_id      = var.tenancy_ocid
+  display_name        = "foundry_instance"
+  shape               = var.compute_shape
+  state               = "RUNNING"
   ### If you don't want to use an additional block storage volume, set this to true.
   ### NOTE: Make sure you don't run terraform apply and terraform destroy without manually deleting the leftover boot volumes
   ###       If you don't manually delete them then they will be counted against your 200GB of Always Free Block Storage limit.
@@ -98,6 +98,17 @@ resource "null_resource" "post_provisioning" {
     null_resource.wait_for_cloud_init,
     oci_core_instance.foundry_instance
   ]
+
+  triggers = {
+    COMPARTMENT_ID   = var.tenancy_ocid
+    INSTANCE_ID      = oci_core_instance.foundry_instance.id
+    AD               = local.selected_AD
+    PUBLIC_IP        = oci_core_instance.foundry_instance.public_ip
+    FOUNDRY_USERNAME = local.foundry_username
+    FOUNDRY_PASSWORD = local.foundry_password
+    DOMAIN           = local.public_domain
+  }
+
   connection {
     host            = oci_core_instance.foundry_instance.public_ip
     type            = "ssh"
@@ -108,13 +119,13 @@ resource "null_resource" "post_provisioning" {
   provisioner "file" {
     destination = "/home/ubuntu/post-provisioning.sh"
     content = templatefile(var.post_provisioning_path, {
-      COMPARTMENT_ID   = var.tenancy_ocid
-      INSTANCE_ID      = oci_core_instance.foundry_instance.id
-      AD               = local.selected_AD
-      PUBLIC_IP        = oci_core_instance.foundry_instance.public_ip
-      FOUNDRY_USERNAME = local.foundry_username
-      FOUNDRY_PASSWORD = local.foundry_password
-      DOMAIN           = local.public_domain
+      COMPARTMENT_ID   = self.triggers.COMPARTMENT_ID
+      INSTANCE_ID      = self.triggers.INSTANCE_ID
+      AD               = self.triggers.AD
+      PUBLIC_IP        = self.triggers.PUBLIC_IP
+      FOUNDRY_USERNAME = self.triggers.FOUNDRY_USERNAME
+      FOUNDRY_PASSWORD = self.triggers.FOUNDRY_PASSWORD
+      DOMAIN           = self.triggers.DOMAIN
     })
   }
   provisioner "remote-exec" {
