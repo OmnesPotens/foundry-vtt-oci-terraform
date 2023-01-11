@@ -12,9 +12,9 @@ ocpus                   = "4"
 alert_rule_recipients   = "<your recipient email>"
 
 ### Access
-rsa_private_key_path = "~/.oci/ival_rsa.pem"
-ssh_private_key_path = "~/keys/fvtt-runner/oci_ssh_key_ecdsa"
-ssh_public_key_path  = "~/keys/fvtt-runner/oci_ssh_key_ecdsa.pub"
+rsa_private_key_path = ""
+ssh_private_key_path = ""
+ssh_public_key_path  = ""
 
 ### (OPTIONAL) Persistent Storage
 create_block_volume      = true # recommended
