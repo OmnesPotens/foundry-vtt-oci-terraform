@@ -16,7 +16,7 @@ While I've attempted to configure the terraform config so that it conforms to th
 # Prerequisites
  - A valid license for [Foundry VTT](https://foundryvtt.com).
  - A new [Oracle OCI account](https://cloud.oracle.com).
- - A local installation of Terraform 1.0.8+.  Installation instructions may be found at https://learn.hashicorp.com/tutorials/terraform/install-cli+
+ - A local installation of Terraform 1.0.8+.  Installation instructions may be found at https://learn.hashicorp.com/tutorials/terraform/install-cli
  - General understanding of Terraform, Cloud Infrastructure, Networking, Shell scripting and your Operating System.  I did all of this from a Linux workstation, it should work just fine in a Windows environment as well.
 
 # Usage

@@ -10,7 +10,8 @@ data "template_cloudinit_config" "userdata" {
     content_type = "text/x-shellscript"
     filename     = "userdata.sh"
     content = templatefile(var.user_data_path, {
-      CONFIG_BUCKET = local.os_bucket
+      CONFIG_BUCKET = local.os_bucket,
+      OTHER_ENV_VARS = var.other_env_vars
     })
   }
   # additional parts can be added here if needed

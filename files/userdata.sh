@@ -6,6 +6,9 @@ export DEBIAN_FRONTEND=noninteractive
 cat <<-'EOF' >> ~/.bashrc
 export VISUAL=nano
 export DEBIAN_FRONTEND=noninteractive
+%{ for k, v in OTHER_ENV_VARS ~}
+export ${k}=${v}
+%{ endfor ~}
 EOF
 
 apt update -y

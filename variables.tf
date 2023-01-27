@@ -173,3 +173,10 @@ variable "domain" {
   this programmatically in the userdata or post-provisioning scripts.
 EOT
 }
+
+variable "other_env_vars" {
+  type = map(string)
+  description = "(Optional) A map of any additional environment variables to add to the compute instance."
+  default = {}
+  sensitive = true
+}
