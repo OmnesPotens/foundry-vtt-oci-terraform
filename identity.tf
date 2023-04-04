@@ -28,11 +28,10 @@ resource "oci_identity_policy" "this" {
   compartment_id = var.tenancy_ocid
   description    = "Grants Foundry instance(s) access to various OCI services based on Dynamic Group membership. Relies on configuring instance_principal auth on the instance(s)."
   name           = "FoundryDynamicInstancePolicy"
-  statements = [
+  statements = compact(concat([
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to use volume-family in tenancy",
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to use instance-family in tenancy",
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to read buckets in tenancy",
-    "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to manage objects in tenancy where all {target.bucket.name='${local.os_bucket}'}",
     "Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to read repos in tenancy"
-  ]
+  ], length(local.os_bucket) > 0 ? ["Allow dynamic-group 'Default'/'${oci_identity_dynamic_group.this.name}' to manage objects in tenancy where all {target.bucket.name='${local.os_bucket}'}"] : []))
 }
