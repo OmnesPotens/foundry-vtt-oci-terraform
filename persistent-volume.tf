@@ -112,9 +112,9 @@ resource "oci_core_volume_attachment" "this" {
       "sudo mkdir -p ${var.foundry_volume_mount_path}",
       "export UUID=$(sudo /usr/sbin/blkid -s UUID -o value $${DEVICE_ID}1)",
       "echo UUID=$${UUID} ${var.foundry_volume_mount_path} xfs defaults,_netdev,nofail 0 2 | sudo tee -a /etc/fstab",
+      "sudo mount $${DEVICE_ID}1 ${var.foundry_volume_mount_path}",
       # mounts all disks in /etc/fstab
-      # "sudo mount -a",
-      "sudo mount $${DEVICE_ID}1 ${var.foundry_volume_mount_path}"
+      "sudo mount -a"
     ]
   }
 }
